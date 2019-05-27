@@ -1,3 +1,254 @@
-.App {
-  margin: 10px;
+body {
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  background-color: #1b61bd;
+  margin: 0;
+}
+
+.container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 20px;
+  z-index: 1;
+  transition-duration: 0.3s;
+}
+
+.bubble-container {
+  position: absolute;
+  display: block;
+  width: calc(100% - 20px);
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+}
+.bubble {
+  position: relative;
+  border-radius: 20px;
+  padding: 20px 20px;
+  background-color: #000000c0;
+  margin-bottom: 10px;
+}
+.bubble .close {
+  display: table;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.text {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.input {
+  text-decoration: none;
+  border: none;
+  outline: none;
+  
+  position: relative;
+  color: black;
+  border-radius: 10px;
+  text-align: left;
+  width: 100%;
+
+  padding: 10px 20px;
+
+  display:flex;
+  flex-direction:row;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  box-shadow: 0 2px 4px #00000040 inset;
+  transition-duration: 0.2s;
+}
+
+.input:not(:placeholder-shown) {
+  background-color: #fff;
+  box-shadow: 0 2px 4px #00000040 inset;
+}
+
+/* BUTTON ROW = CHOICE */
+.choice {
+  display: flex;
+  position: relative;
+}
+.choice .flex {
+  flex-basis: 0;
+  flex-grow: 1;
+}
+.choice:not(.wide) > :not(:first-child) {
+  margin-left: 20px;
+}
+
+/* WIDE */
+.choice.wide > :not(:first-child) {
+  margin-left: 1px;
+}
+.wide .button {
+  border-radius: 0;
+}
+.choice.wide .flex:first-child .button {
+  border-radius: 10px 0 0 10px;
+}
+.choice.wide .flex:last-child .button {
+  border-radius: 0 10px 10px 0;
+}
+
+.button-container {
+  display: inline-block;
+}
+
+.footer {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.footer .button-container {
+  margin-left: 10px;
+}
+
+.choice .button {
+  width: 100%;
+  padding: 0 !important;
+}
+
+.button {
+  cursor: pointer;
+  display: table;
+  height: 25px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #2483ff;
+  color: #fff;
+  transition-duration: 0.3s;
+  box-shadow: 0px 3px 0px #00000040;
+  font-size: small;
+  transform: translateY(0px);
+}
+
+.button.active {
+  background-color: #ffffff;
+  color: #2483ff;
+}
+
+.button:active, .button.active {
+  box-shadow: 0px 0px 0px #00000040;
+  transform: translateY(3px);
+  transition-duration: 0.1s;
+}
+
+.button:hover:not(.active) {
+  opacity: 0.5;
+}
+
+.button .content {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+} 
+
+.button.img {
+  border-radius: 20px !important;
+  overflow: hidden;
+  max-width: 200px;
+  margin: auto;
+}
+
+.console-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: #000000c0;
+  z-index: 2;
+}
+
+.console-container ~ .container {
+  opacity: 0;
+  transition-duration: 0.3s;
+}
+
+.console {
+  overflow-y: scroll;
+  position: absolute;
+  right: 20px;
+  left: 20px;
+  bottom: 20px;
+  top: 80px;
+  background-color: #000;
+  padding: 20px;
+	font-family: Consolas,monaco,monospace; 
+}
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 100px 100px #fff4;
+  border: solid 5px transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 100px 100px #fff8;
+  border: solid 5px transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: inset 0 0 100px 100px #fff4;
+  border: solid 5px transparent;
+}
+
+.transparent {
+  background-color: #00000000;  
+}
+
+.user {
+  width: 100%;
+  background-color: #0000;
+  outline: none;
+  border: none;
+  color: white;
+  font: inherit;
+}
+
+.notification {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 15px;
+  height: 15px;
+  border-radius: 100px;
+  background-color: #fff;
+  transform: translate(50%, -50%);
+}
+
+
+
+.flashing {
+  -webkit-animation-name: example;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+  animation-name: example;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes example {
+  0%   {opacity: 1;}
+  50%  {opacity: 0.5;}
+  100% {opacity: 1;}
+}
+
+@keyframes example {
+  0%   {opacity: 1;}
+  50%  {opacity: 0.5;}
+  100% {opacity: 1;}
 }
