@@ -3,7 +3,7 @@ import React from 'react';
 export default function SerialPortSelector(props) {
   let ports;
   if(props.ports.length === 0) {
-    ports = <option>NO PORTS</option>;
+    ports = <option disabled>NO PORTS</option>;
   } else {
     ports = props.ports.map((item, key) => (
       <option key={`${item}-${key}`} value={key}>{item.manufacturer} {item.comName}</option>

@@ -3,9 +3,7 @@ var serialPort = require('serialport');
 serialPort.list(function (err, ports) {
   ports.forEach(function(port) {
     if(port.pnpId || port.manufacturer){
-      console.log(port.comName);
-      console.log(port.pnpId);
-      console.log(port.manufacturer);
+      console.log(port);
     }
   });
 });
