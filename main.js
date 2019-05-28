@@ -1,7 +1,9 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain} = require('electron')
+const serialPort = require('serialport');
+const spawn = require('child_process').spawn;
 
-var spawn = require('child_process').spawn;
+// require('electron-reload')(__dirname);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -51,23 +53,28 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow()
 })
 
-ipcMain.on('foo', function(e, foo){
-  // mainWindow.webContents.send('item:add', item);
-  console.log(foo);
-  // for(let i = 0; i < 10; i++){
-  //   mainWindow.webContents.send('FooToYou', `Some data ${i * 10}`);
-  // }
+ipcMain.on('ports', (e, data) => {
+  serialPort.list(function (err, allPorts) {
+    const ports = allPorts.filter((port) => (port.pnpId || port.manufacturer))
+    mainWindow.webContents.send('ports', ports);
+  });
+})
 
-  const testScript = spawn('sh', ['test.sh']);
+const platforms = ['Arduino', 'Python', 'LUA'];
+const baudrates = [9600, 57600, 74880, 115200, 230400, 460800, 921600];
+
+ipcMain.on('upload', (e, data) => {
+  const params = ['upload.sh', platforms[data.platform], baudrates[data.baudrate], data.port.comName];
+  const testScript = spawn('sh', params);
 
   testScript.stdout.on('data', (data) => {
-    mainWindow.webContents.send('data', data);
+    mainWindow.webContents.send('terminal:data', data);
   });
   testScript.stderr.on('data', (data) => {
-    mainWindow.webContents.send('err', data);
+    mainWindow.webContents.send('terminal:err', data);
   });
   testScript.on('exit', function (code) {
-    mainWindow.webContents.send('done', code);
+    mainWindow.webContents.send('terminal:done', code);
   });
 });
 

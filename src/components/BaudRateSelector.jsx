@@ -13,7 +13,7 @@ export default function BaudRateSelector(props) {
 
   return (
     <React.Fragment>
-      <div className="text"> Select baud rate </div>
+      <div className="text"> Select baud rate (recommanded 921600) </div>
       <div className="choice wide">
         {
           baudrates.map((item, i) => (

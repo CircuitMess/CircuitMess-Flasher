@@ -1,7 +1,6 @@
 import React from 'react';
-
 import Console from './components/Console';
-import ModeSelector from './components/ModeSelector';
+import PlatformSelector from './components/PlatformSelector';
 import SerialPortSelector from './components/SerialPortSelector';
 import BaudRateSelector from './components/BaudRateSelector';
 import Footer from './components/Footer'
@@ -14,93 +13,99 @@ const ipcRenderer  = electron.ipcRenderer;
 class App extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
-      data: ['foobar'],
-      terminal: 'THIS IS THE TERMINAL\n\n',
-      open: false,
+      isConsoleOpen: false,
+      ports: [],
       selected: {
-        baudrate: 3,
+        baudrate: 6,
         platform: 2,
-        port: 1
+        port: 0
       }
     }
 
-    for(let i = 0; i < 4; i++){
-      setTimeout(this.send({id: i}), 1000 * i);
-    }
-
-    this.selectBaud = this.selectBaud.bind(this);
+    this.upload = this.upload.bind(this);
     this.openConsole = this.openConsole.bind(this);
     this.closeConsole = this.closeConsole.bind(this);
+    this.selectPlatform = this.selectPlatform.bind(this);
+    this.selectBaud = this.selectBaud.bind(this);
   }
 
   componentDidMount() {
-    ipcRenderer.on('FooToYou', (e, item) => {
-      const {data} = this.state;
-      console.log('Recived', item);
-      this.setState({data: [...data, item]});
+    ipcRenderer.on('ports', (e, data) => {
+      const ports = data.map(port => {
+        return {
+          manufacturer: port.manufacturer,
+          serialNumber: port.serialNumber,
+          pnpId: port.pnpId,
+          comName: port.comName
+        };
+      });
+      if(ports.length < 2){
+        const {selected} = this.state;
+        selected.port = ports.length === 1 ? 0 : -1;
+        this.setState({ports, selected});
+      }
     });
 
+
+    setInterval(this.getPorts, 500);
     this.getPorts();
-
-    ipcRenderer.on('data', (e, item) => {
-      const { terminal } = this.state;
-      this.setState({terminal: terminal + item});
-    });
-    ipcRenderer.on('err', (e, item) => {
-      const { terminal } = this.state;
-      this.setState({terminal: terminal + 'ERROR: ' + item});
-    });
-    ipcRenderer.on('done', (e, item) => {
-      const { terminal } = this.state;
-      this.setState({terminal: terminal + 'DONE\n\n'});
-    });
   }
 
   getPorts() {
-    ipcRenderer.send('ports', null);
-    ipcRenderer.on('ports', (e, item) => {
-      console.log(item);
-    });
+    ipcRenderer.send('ports', 'null');
   }
 
-  send(data) {
-    ipcRenderer.send('foo', data);
-    console.log('send');
+  upload() {
+    let { selected } = this.state;
+    if(selected.port === -1) {
+      console.error('NO PORT SELECTED');
+      return;
+    }
+
+    this.setState({isConsoleOpen: true});
+
+    const port = this.state.ports[selected.port];
+    const data = {...selected, port: port};
+
+    console.log(data);
+    ipcRenderer.send('upload', data);
+  }
+
+  openConsole() {
+    this.setState({isConsoleOpen: true});
+  }
+
+  closeConsole() {
+    this.setState({isConsoleOpen: false});
+  }
+
+  selectPlatform(i) {
+    const { selected } = this.state;
+    selected.platform = i;
+    this.setState({selected});
   }
 
   selectBaud(i) {
     const { selected } = this.state;
     selected.baudrate = i
-    console.log(selected);
     this.setState({selected});
   }
 
-  openConsole() {
-    this.setState({open: true});
-  }
-
-  closeConsole() {
-    this.setState({open: false});
-  }
-
   render() {
-    const ports = [
-      'asd',
-      'asdasdsad',
-      'asdadasd'
-    ]
-
-    const { selected, open } = this.state;
-    const buttons = [this.openConsole, this.close, this.upload];
+    const { selected, isConsoleOpen, ports } = this.state;
+    const buttons = [this.openConsole, this.upload, this.close];
 
     return (
       <div className="container">
         <SerialPortSelector ports={ports} selected={selected.port}/>
-        <Console text={this.state.terminal} open={open} close={this.closeConsole}/>
+        <button onClick={this.getPorts}>Reload button</button>
+
+        <Console isConsoleOpen={isConsoleOpen} close={this.closeConsole}/>
         <BaudRateSelector selected={selected.baudrate} selectBaud={this.selectBaud}/>
-        <ModeSelector selected={selected.mode}/>
+        <PlatformSelector selected={selected.platform} selectPlatform={this.selectPlatform}/>
+
         <Footer buttons={buttons}/>
       </div>
     )

@@ -4,14 +4,14 @@ export default function Footer(props) {
   return (
     <div className="footer">
       <div className="button-container">
-        <div className="button">
-          <div className="content" onClick={props.buttons[0]}> Console </div>
+        <div className="button" onClick={props.buttons[0]}>
+          <div className="content"> Console </div>
           <div className="notification flashing"></div>
         </div>
       </div>
       <div className="button-container">
-        <div className="button">
-          <div className="content"> Ok </div>
+        <div className="button" onClick={props.buttons[1]}>
+          <div className="content"> Upload </div>
         </div>
       </div>
       <div className="button-container">
