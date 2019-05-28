@@ -186,6 +186,7 @@ body {
   padding: 20px;
 	font-family: Consolas,monaco,monospace; 
 }
+
 ::-webkit-scrollbar {
   width: 15px;
 }

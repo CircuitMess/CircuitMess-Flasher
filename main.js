@@ -58,8 +58,6 @@ ipcMain.on('foo', function(e, foo){
   //   mainWindow.webContents.send('FooToYou', `Some data ${i * 10}`);
   // }
 
-  
-
   const testScript = spawn('sh', ['test.sh']);
 
   testScript.stdout.on('data', (data) => {
