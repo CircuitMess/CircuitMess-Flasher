@@ -50,7 +50,6 @@ class App extends React.Component {
 
 
     setInterval(this.getPorts, 500);
-    this.getPorts();
   }
 
   getPorts() {

@@ -68,13 +68,13 @@ ipcMain.on('upload', (e, data) => {
   const testScript = spawn('sh', params);
 
   testScript.stdout.on('data', (data) => {
-    mainWindow.webContents.send('terminal:data', data);
+    mainWindow.webContents.send('console:data', data);
   });
   testScript.stderr.on('data', (data) => {
-    mainWindow.webContents.send('terminal:err', data);
+    mainWindow.webContents.send('console:err', data);
   });
   testScript.on('exit', function (code) {
-    mainWindow.webContents.send('terminal:done', code);
+    mainWindow.webContents.send('console:done', code);
   });
 });
 

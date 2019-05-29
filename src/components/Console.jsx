@@ -13,15 +13,15 @@ export default class Console extends React.Component {
   }
 
   componentDidMount() {
-    ipcRenderer.on('terminal:data', (e, item) => {
+    ipcRenderer.on('console:data', (e, item) => {
       const { text } = this.state;
       this.setState({text: text + item});
     });
-    ipcRenderer.on('terminal:err', (e, item) => {
+    ipcRenderer.on('console:err', (e, item) => {
       const { text } = this.state;
       this.setState({text: text + 'ERROR: ' + item});
     });
-    ipcRenderer.on('terminal:done', (e, item) => {
+    ipcRenderer.on('console:done', (e, item) => {
       const { text } = this.state;
       this.setState({text: text + 'root@circuitmess:~$ \n'});
     });
