@@ -16,14 +16,14 @@ function createWindow() {
     }
   });
 
-  mainWindow.setMenu(null);
+  // mainWindow.setMenu(null);
 
   // and load the index.html of the app.
   // mainWindow.loadFile('index.html')
   mainWindow.loadURL("http://localhost:3000/");
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {

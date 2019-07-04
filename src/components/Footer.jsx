@@ -1,24 +1,29 @@
 import React from "react";
 
-export default function Footer(props) {
+const Footer = props => {
+  const { buttons } = props;
+  const [openConsole, upload, close] = buttons;
+
   return (
     <div className="footer">
       <div className="button-container">
-        <div className="button" onClick={props.buttons[0]}>
+        <div className="button" onClick={openConsole}>
           <div className="content"> Console </div>
           <div className="notification flashing" />
         </div>
       </div>
       <div className="button-container">
-        <div className="button" onClick={props.buttons[1]}>
+        <div className="button" onClick={upload}>
           <div className="content"> Upload </div>
         </div>
       </div>
       <div className="button-container">
-        <div className="button" onClick={props.buttons[2]}>
+        <div className="button" onClick={close}>
           <div className="content"> Close </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Footer;

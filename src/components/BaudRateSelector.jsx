@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function BaudRateSelector(props) {
+const BaudRateSelector = props => {
   const baudrates = [9600, 57600, 74880, 115200, 230400, 460800, 921600];
 
   return (
@@ -18,4 +18,6 @@ export default function BaudRateSelector(props) {
       <br />
     </React.Fragment>
   );
-}
+};
+
+export default BaudRateSelector;

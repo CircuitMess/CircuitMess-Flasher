@@ -1,15 +1,19 @@
 import React from "react";
 
-export default function PlatformSelector(props) {
+const PlatformSelector = props => {
+  const { selectPlatform, selected } = props;
+
   return (
     <React.Fragment>
       <div className="text">Select mode</div>
       <div className="choice">
         {[0, 1, 2].map(i => (
-          <div className="flex" onClick={() => props.selectPlatform(i)}>
-            <div
-              className={`button img ${props.selected === i ? "active" : ""}`}
-            >
+          <div
+            className="flex"
+            onClick={() => selectPlatform(i)}
+            key={"platform" + i}
+          >
+            <div className={`button img ${selected === i ? "active" : ""}`}>
               <img
                 src={require(`../assets/flasher_icons-0${i + 1}.png`)}
                 alt=""
@@ -21,4 +25,6 @@ export default function PlatformSelector(props) {
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default PlatformSelector;
