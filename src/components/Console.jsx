@@ -1,34 +1,34 @@
-import React from 'react';
+import React from "react";
 
-const electron = window.require('electron');
-const ipcRenderer  = electron.ipcRenderer;
+const electron = window.require("electron");
+const ipcRenderer = electron.ipcRenderer;
 
 export default class Console extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      text: 'root@circuitmess:~$ \n'
-    }
+      text: "root@circuitmess:~$ \n"
+    };
   }
 
   componentDidMount() {
-    ipcRenderer.on('console:data', (e, item) => {
+    ipcRenderer.on("console:data", (e, item) => {
       const { text } = this.state;
-      this.setState({text: text + item});
+      this.setState({ text: text + item });
     });
-    ipcRenderer.on('console:err', (e, item) => {
+    ipcRenderer.on("console:err", (e, item) => {
       const { text } = this.state;
-      this.setState({text: text + 'ERROR: ' + item});
+      this.setState({ text: text + "ERROR: " + item });
     });
-    ipcRenderer.on('console:done', (e, item) => {
+    ipcRenderer.on("console:done", (e, item) => {
       const { text } = this.state;
-      this.setState({text: text + 'root@circuitmess:~$ \n'});
+      this.setState({ text: text + "root@circuitmess:~$ \n" });
     });
   }
 
   render() {
-    if(!this.props.isConsoleOpen){
+    if (!this.props.isConsoleOpen) {
       return null;
     }
 
@@ -37,17 +37,15 @@ export default class Console extends React.Component {
     return (
       <div className="console-container">
         <div className="bubble transparent">
-          <div className="text">Console</div> 
+          <div className="text">Console</div>
           <div className="close" onClick={this.props.close}>
             <i className="material-icons"> close </i>
           </div>
         </div>
         <div className="console">
-          <p style={{whiteSpace: 'pre-line', color: '#00ff00'}}>
-            { text }
-          </p>
+          <p style={{ whiteSpace: "pre-line", color: "#00ff00" }}>{text}</p>
         </div>
       </div>
-    )
+    );
   }
 }

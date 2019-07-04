@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export default function Footer(props) {
   return (
@@ -6,7 +6,7 @@ export default function Footer(props) {
       <div className="button-container">
         <div className="button" onClick={props.buttons[0]}>
           <div className="content"> Console </div>
-          <div className="notification flashing"></div>
+          <div className="notification flashing" />
         </div>
       </div>
       <div className="button-container">
@@ -20,5 +20,5 @@ export default function Footer(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
