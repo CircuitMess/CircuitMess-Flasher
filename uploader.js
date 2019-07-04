@@ -10,13 +10,17 @@ const run = (port, os, baud, outCB, errCB, exitCB, platform) => {
   const spawn = require("child_process").spawn;
   const { command, params } = erase(port, baud, os);
 
+  console.log("Erase");
+
   const upload = (code, _) => {
     if (code === 0) {
       const spawn = require("child_process").spawn;
       const { command, params } = flash(port, baud, os);
       const uploadOptions = platformOptions(platform);
 
-      console.log(command, [...params, ...uploadOptions]);
+      console.log("Upload");
+
+      // console.log(command, [...params, ...uploadOptions]);
       const process = spawn(command, [...params, ...uploadOptions]);
 
       process.addListener(outCB, errCB, (code, _) => {
@@ -28,18 +32,9 @@ const run = (port, os, baud, outCB, errCB, exitCB, platform) => {
     }
   };
 
-  console.log(command, params);
+  // console.log(command, params);
   const process = spawn(command, params);
   addListeners(process, outCB, errCB, upload);
 };
 
-const os = "windows";
-const port = "COM5";
-const platform = "arduino";
-
-const cb = () => {};
-const done = () => {
-  console.log("done");
-};
-
-run(port, os, 115200, cb, cb, done, platform);
+module.exports = run;

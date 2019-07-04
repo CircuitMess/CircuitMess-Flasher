@@ -15,7 +15,7 @@ export default function Footer(props) {
         </div>
       </div>
       <div className="button-container">
-        <div className="button">
+        <div className="button" onClick={props.buttons[2]}>
           <div className="content"> Close </div>
         </div>
       </div>

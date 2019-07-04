@@ -1,7 +1,6 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require("electron");
 const serialPort = require("serialport");
-const spawn = require("child_process").spawn;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -11,18 +10,20 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 625,
     webPreferences: {
       nodeIntegration: true
     }
   });
+
+  mainWindow.setMenu(null);
 
   // and load the index.html of the app.
   // mainWindow.loadFile('index.html')
   mainWindow.loadURL("http://localhost:3000/");
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {
@@ -61,25 +62,33 @@ ipcMain.on("ports", (e, data) => {
 const platforms = ["Arduino", "Python", "LUA"];
 const baudrates = [9600, 57600, 74880, 115200, 230400, 460800, 921600];
 
-const { foo, bar } = require("./uploader");
+const upload = require("./uploader");
+const dataCB = data => {
+  console.log("FOOBAR - data");
+  mainWindow.webContents.send("console:data", data);
+};
+
+const errCB = data => {
+  console.log("FOOBAR - err");
+  mainWindow.webContents.send("console:err", data);
+};
+
+const doneCB = code => {
+  console.log("FOOBAR - done");
+  mainWindow.webContents.send("console:done", code);
+};
 
 ipcMain.on("upload", (e, data) => {
-  const platform = process.platform === "win32" ? "windows" : "linux";
+  const os = process.platform === "win32" ? "windows" : "linux";
+  const { port, baudrate, platform } = data;
 
-  // const params = [
-  //   "upload.sh",
-  //   platforms[data.platform],
-  //   baudrates[data.baudrate],
-  //   data.port.comName
-  // ];
-  // const testScript = spawn("sh", params);
-  // testScript.stdout.on("data", data => {
-  //   mainWindow.webContents.send("console:data", data);
-  // });
-  // testScript.stderr.on("data", data => {
-  //   mainWindow.webContents.send("console:err", data);
-  // });
-  // testScript.on("exit", function(code) {
-  //   mainWindow.webContents.send("console:done", code);
-  // });
+  upload(
+    port.comName,
+    os,
+    baudrates[baudrate],
+    dataCB,
+    errCB,
+    doneCB,
+    platforms[platform]
+  );
 });

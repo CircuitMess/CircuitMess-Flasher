@@ -7,8 +7,8 @@ export default function PlatformSelector(props) {
       <div className="choice">
         {
           [0, 1, 2].map(i => (
-            <div className="flex" onClick={() => props.selectPlatform(i)} style={props.selected === i ? {backgroundColor: "red"} : null}>
-              <div className="button img">
+            <div className="flex" onClick={() => props.selectPlatform(i)}>
+              <div className={`button img ${props.selected === i ? 'active' : ''}`}>
                 <img src={require(`../assets/flasher_icons-0${i+1}.png`)} alt="" style={{width: '100%'}}/>
               </div>
             </div>

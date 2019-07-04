@@ -1,22 +1,32 @@
-import React from 'react';
+import React from "react";
 
 export default function SerialPortSelector(props) {
   let ports;
-  if(props.ports.length === 0) {
+  if (props.ports.length === 0) {
     ports = <option disabled>NO PORTS</option>;
   } else {
     ports = props.ports.map((item, key) => (
-      <option key={`${item}-${key}`} value={key}>{item.manufacturer} {item.comName}</option>
+      <option key={`${item}-${key}`} value={key}>
+        {item.manufacturer} {item.comName}
+      </option>
     ));
   }
 
   return (
     <React.Fragment>
       <div className="text"> Serial port </div>
-      <select id="browsers" style={{'width': '100%'}} selected={props.selected}>
-        { ports }
+      {/* <select id="browsers" style={{'width': '100%'}} selected={props.selected}>
+        
+      </select> */}
+      <select
+        placeholder="Serial port"
+        name="address"
+        class="input"
+        selected={props.selected}
+      >
+        {ports}
       </select>
-      <br/>
+      <br />
     </React.Fragment>
-  )
+  );
 }

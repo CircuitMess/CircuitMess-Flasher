@@ -91,6 +91,12 @@ class App extends React.Component {
     this.setState({ selected });
   }
 
+  close() {
+    const remote = electron.remote;
+    const currWindow = remote.getCurrentWindow();
+    currWindow.close();
+  }
+
   render() {
     const { selected, isConsoleOpen, ports } = this.state;
     const buttons = [this.openConsole, this.upload, this.close];
@@ -98,7 +104,6 @@ class App extends React.Component {
     return (
       <div className="container">
         <SerialPortSelector ports={ports} selected={selected.port} />
-        <button onClick={this.getPorts}>Reload button</button>
 
         <Console isConsoleOpen={isConsoleOpen} close={this.closeConsole} />
         <BaudRateSelector
