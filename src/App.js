@@ -1,14 +1,14 @@
-import React from 'react';
-import Console from './components/Console';
-import PlatformSelector from './components/PlatformSelector';
-import SerialPortSelector from './components/SerialPortSelector';
-import BaudRateSelector from './components/BaudRateSelector';
-import Footer from './components/Footer'
+import React from "react";
+import Console from "./components/Console";
+import PlatformSelector from "./components/PlatformSelector";
+import SerialPortSelector from "./components/SerialPortSelector";
+import BaudRateSelector from "./components/BaudRateSelector";
+import Footer from "./components/Footer";
 
-import './App.css';
+import "./App.css";
 
-const electron = window.require('electron');
-const ipcRenderer  = electron.ipcRenderer;
+const electron = window.require("electron");
+const ipcRenderer = electron.ipcRenderer;
 
 class App extends React.Component {
   constructor(props) {
@@ -22,7 +22,7 @@ class App extends React.Component {
         platform: 2,
         port: 0
       }
-    }
+    };
 
     this.upload = this.upload.bind(this);
     this.openConsole = this.openConsole.bind(this);
@@ -32,7 +32,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    ipcRenderer.on('ports', (e, data) => {
+    ipcRenderer.on("ports", (e, data) => {
       const ports = data.map(port => {
         return {
           manufacturer: port.manufacturer,
@@ -41,55 +41,54 @@ class App extends React.Component {
           comName: port.comName
         };
       });
-      if(ports.length < 2){
-        const {selected} = this.state;
+      if (ports.length < 2) {
+        const { selected } = this.state;
         selected.port = ports.length === 1 ? 0 : -1;
-        this.setState({ports, selected});
+        this.setState({ ports, selected });
       }
     });
-
 
     setInterval(this.getPorts, 500);
   }
 
   getPorts() {
-    ipcRenderer.send('ports', 'null');
+    ipcRenderer.send("ports", "null");
   }
 
   upload() {
     let { selected } = this.state;
-    if(selected.port === -1) {
-      console.error('NO PORT SELECTED');
+    if (selected.port === -1) {
+      console.error("NO PORT SELECTED");
       return;
     }
 
-    this.setState({isConsoleOpen: true});
+    this.setState({ isConsoleOpen: true });
 
     const port = this.state.ports[selected.port];
-    const data = {...selected, port: port};
+    const data = { ...selected, port: port };
 
     console.log(data);
-    ipcRenderer.send('upload', data);
+    ipcRenderer.send("upload", data);
   }
 
   openConsole() {
-    this.setState({isConsoleOpen: true});
+    this.setState({ isConsoleOpen: true });
   }
 
   closeConsole() {
-    this.setState({isConsoleOpen: false});
+    this.setState({ isConsoleOpen: false });
   }
 
   selectPlatform(i) {
     const { selected } = this.state;
     selected.platform = i;
-    this.setState({selected});
+    this.setState({ selected });
   }
 
   selectBaud(i) {
     const { selected } = this.state;
-    selected.baudrate = i
-    this.setState({selected});
+    selected.baudrate = i;
+    this.setState({ selected });
   }
 
   render() {
@@ -98,16 +97,22 @@ class App extends React.Component {
 
     return (
       <div className="container">
-        <SerialPortSelector ports={ports} selected={selected.port}/>
+        <SerialPortSelector ports={ports} selected={selected.port} />
         <button onClick={this.getPorts}>Reload button</button>
 
-        <Console isConsoleOpen={isConsoleOpen} close={this.closeConsole}/>
-        <BaudRateSelector selected={selected.baudrate} selectBaud={this.selectBaud}/>
-        <PlatformSelector selected={selected.platform} selectPlatform={this.selectPlatform}/>
+        <Console isConsoleOpen={isConsoleOpen} close={this.closeConsole} />
+        <BaudRateSelector
+          selected={selected.baudrate}
+          selectBaud={this.selectBaud}
+        />
+        <PlatformSelector
+          selected={selected.platform}
+          selectPlatform={this.selectPlatform}
+        />
 
-        <Footer buttons={buttons}/>
+        <Footer buttons={buttons} />
       </div>
-    )
+    );
   }
 }
 
