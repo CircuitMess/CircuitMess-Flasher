@@ -13,7 +13,7 @@ export default function SerialPortSelector(props) {
   return (
     <React.Fragment>
       <div className="text"> Serial port </div>
-      <select id="browsers" selected={props.selected}>
+      <select id="browsers" style={{'width': '100%'}} selected={props.selected}>
         { ports }
       </select>
       <br/>
