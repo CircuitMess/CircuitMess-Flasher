@@ -18,22 +18,27 @@
 // const esptool = require("esptoolpy-js");
 // esptool.read_mac("/dev/ttyUSB0", foo => console.log(foo));
 
-const port = "/dev/ttyUSB0";
+const port = "COM5";
+const platform = "windows";
+
+const runCommandWindows = "dist/esptool.exe";
+const paramsWindows = ["--port", port, "--baud", "115200", "erase_flash"];
+
+const runCommandLinux = "python";
+const paramsLinux = ["esptool.py", ...paramsWindows];
+
+const command = platform =>
+  platform === "windows" ? runCommandWindows : runCommandLinux;
+const params = platform =>
+  platform === "windows" ? paramsWindows : paramsLinux;
 
 const spawn = require("child_process").spawn;
-const command = spawn("python", [
-  "esptool.py",
-  "-p",
-  port,
-  "--baud",
-  "115200",
-  "erase_flash"
-]);
+const process = spawn(command(platform), params(platform));
 
-command.stdout.on("data", function(data) {
+process.stdout.on("data", function(data) {
   console.log("stdout: " + data);
 });
 
-command.stderr.on("data", function(data) {
-  console.log("stderr: " + data);
+process.stderr.on("data", function(data) {
+  console.error("stderr: " + data);
 });
