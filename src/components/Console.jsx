@@ -15,6 +15,10 @@ const Console = props => {
   useEffect(() => {
     ipcRenderer.on("console:data", (e, item) => {
       setText(text => {
+        if (item.indexOf("!CLEAR!") !== -1) {
+          return "root@circuitmess:~$ \n";
+        }
+
         if (item.indexOf("Writing") !== -1) {
           return text.slice(0, text.lastIndexOf("Writing")) + item;
         }

@@ -29,6 +29,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "buildDependenciesFromSource":"true",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -42,13 +43,14 @@
     ]
   },
   "devDependencies": {
-    "electron": "^5.0.2",
+    "electron": "^4.2.6",
     "electron-builder": "^21.0.15",
     "electron-rebuild": "^1.8.5",
     "electron-reload": "^1.4.0",
     "foreman": "^3.0.1"
   },
   "build": {
+    "buildDependenciesFromSource":"true",
     "appId": "foobar",
     "mac": {
       "category": "Fooo"
@@ -57,9 +59,6 @@
     "files": [
       "build/**/*",
       "node_modules/**/*",
-      "package.json",
-      "uploader.js",
-      "uploader_options.js",
       "main.js"
     ],
     "linux": {
@@ -67,6 +66,15 @@
         "AppImage",
         "deb"
       ]
-    }
+    },
+    "extraResources": [
+      {
+        "from": "lib/",
+        "to": "lib/",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
   }
 }
