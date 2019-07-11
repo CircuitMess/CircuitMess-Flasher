@@ -1,23 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const electron = window.require("electron");
 const ipcRenderer = electron.ipcRenderer;
 
 const Console = props => {
+  const { close, isConsoleOpen } = props;
   const [text, setText] = useState("root@circuitmess:~$ \n");
+  const bottom = useRef(null);
+
+  const scroll = () => {
+    bottom.current.scrollIntoView();
+  };
+
   useEffect(() => {
     ipcRenderer.on("console:data", (e, item) => {
-      setText(text => text + item);
+      setText(text => {
+        if (item.indexOf("Writing") !== -1) {
+          return text.slice(0, text.lastIndexOf("Writing")) + item;
+        }
+        return text + item;
+      });
+      scroll();
     });
     ipcRenderer.on("console:err", (e, item) => {
       setText(text => text + "ERROR: " + item);
+      scroll();
     });
     ipcRenderer.on("console:done", (e, item) => {
       setText(text => text + "root@circuitmess:~$ \n");
+      scroll();
     });
   }, []);
-
-  const { close, isConsoleOpen } = props;
 
   if (!isConsoleOpen) {
     return null;
@@ -33,6 +46,7 @@ const Console = props => {
       </div>
       <div className="console">
         <p style={{ whiteSpace: "pre-line", color: "#00ff00" }}>{text}</p>
+        <div className="empty" ref={bottom} />
       </div>
     </div>
   );

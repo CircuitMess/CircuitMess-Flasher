@@ -14,7 +14,7 @@ const erase = (port, baud, os) =>
     : {
         command: "python",
         params: [
-          "esptool.py",
+          "lib/esptool.py",
           ...port_baud_params(port, baud),
           ...default_params,
           "erase_flash"
@@ -34,8 +34,8 @@ const flash = (port, baud, os) =>
       }
     : {
         command: "python",
-        parmas: [
-          "esptool.py",
+        params: [
+          "lib/esptool.py",
           ...port_baud_params(port, baud),
           ...default_params,
           "write_flash",
@@ -45,9 +45,9 @@ const flash = (port, baud, os) =>
 
 const platformOptions = platform => {
   switch (platform) {
-    case "python":
+    case "Python":
       return ["0x1000", "lib/bins/python.bin"];
-    case "lua":
+    case "LUA":
       return [
         "--flash_mode",
         "dio",

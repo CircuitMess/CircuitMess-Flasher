@@ -3,19 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "main": "main.js",
+  "author": {
+    "email": "zekan.fran369@gmail.com",
+    "name": "Fran Zekan"
+  },
+  "homepage": "./",
   "dependencies": {
-    "electron-packager": "^14.0.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
     "serialport": "^7.1.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "electron ."
+    "electron": "electron .",
+    "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
+    "win-start": "set BROWSER=none react-scripts start",
+    "win-electron-dev": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
+    "dev": "nf start",
+    "postinstall": "electron-builder install-app-deps"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -34,8 +43,30 @@
   },
   "devDependencies": {
     "electron": "^5.0.2",
-    "electron-builder": "^20.44.4",
+    "electron-builder": "^21.0.15",
     "electron-rebuild": "^1.8.5",
-    "electron-reload": "^1.4.0"
+    "electron-reload": "^1.4.0",
+    "foreman": "^3.0.1"
+  },
+  "build": {
+    "appId": "foobar",
+    "mac": {
+      "category": "Fooo"
+    },
+    "extends": null,
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "uploader.js",
+      "uploader_options.js",
+      "main.js"
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
   }
 }

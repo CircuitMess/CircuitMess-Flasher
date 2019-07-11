@@ -18,7 +18,7 @@ class App extends React.Component {
       isConsoleOpen: false,
       ports: [],
       selected: {
-        baudrate: 6,
+        baudrate: 3,
         platform: 2,
         port: 0
       }

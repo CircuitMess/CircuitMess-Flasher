@@ -9,22 +9,20 @@ const addListeners = (process, outCB, errCB, exitCB) => {
 const run = (port, os, baud, outCB, errCB, exitCB, platform) => {
   const spawn = require("child_process").spawn;
   const { command, params } = erase(port, baud, os);
-
-  console.log("Erase");
-
   const upload = (code, _) => {
     if (code === 0) {
       const spawn = require("child_process").spawn;
       const { command, params } = flash(port, baud, os);
       const uploadOptions = platformOptions(platform);
 
-      console.log("Upload");
+      outCB(`${"#".repeat(20)}\nUploading ${platform}\n${"#".repeat(20)}\n`);
 
-      // console.log(command, [...params, ...uploadOptions]);
+      console.log(command, [params, uploadOptions]);
       const process = spawn(command, [...params, ...uploadOptions]);
 
-      process.addListener(outCB, errCB, (code, _) => {
+      addListeners(process, outCB, errCB, (code, _) => {
         console.log(code);
+        console.log("Done");
         exitCB && exitCB(code);
       });
     } else {
@@ -32,7 +30,6 @@ const run = (port, os, baud, outCB, errCB, exitCB, platform) => {
     }
   };
 
-  // console.log(command, params);
   const process = spawn(command, params);
   addListeners(process, outCB, errCB, upload);
 };

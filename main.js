@@ -1,6 +1,8 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require("electron");
 const serialPort = require("serialport");
+const path = require("path");
+const url = require("url");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -20,10 +22,18 @@ function createWindow() {
 
   // and load the index.html of the app.
   // mainWindow.loadFile('index.html')
-  mainWindow.loadURL("http://localhost:3000/");
+  // mainWindow.loadURL("http://localhost:3000/");
+  const startUrl =
+    process.env.ELECTRON_START_URL ||
+    url.format({
+      pathname: path.join(__dirname, "./build/index.html"),
+      protocol: "file:",
+      slashes: true
+    });
+  mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {
@@ -81,6 +91,8 @@ const doneCB = code => {
 ipcMain.on("upload", (e, data) => {
   const os = process.platform === "win32" ? "windows" : "linux";
   const { port, baudrate, platform } = data;
+
+  dataCB(`${"#".repeat(20)}\nErasing Flash\n${"#".repeat(20)}\n`);
 
   upload(
     port.comName,
