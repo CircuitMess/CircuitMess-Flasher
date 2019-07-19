@@ -13,7 +13,7 @@ const ProgressBar = props => {
         background-color: #00000040
       }
       .aProgress {
-        background-color: #adafad;
+        background-color: #ffffff;
         height: 20px;
         border-radius: 4px;
         transition-duration: 0.1s;
