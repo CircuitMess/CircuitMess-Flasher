@@ -4,6 +4,7 @@ import PlatformSelector from "./components/PlatformSelector";
 import SerialPortSelector from "./components/SerialPortSelector";
 import BaudRateSelector from "./components/BaudRateSelector";
 import Footer from "./components/Footer";
+import ProgressBar from "./components/ProgressBar";
 
 import "./App.css";
 
@@ -21,7 +22,10 @@ class App extends React.Component {
         baudrate: 3,
         platform: 2,
         port: 0
-      }
+      },
+      progress: 0,
+      uploading: false,
+      showProgess: false
     };
 
     this.upload = this.upload.bind(this);
@@ -62,13 +66,29 @@ class App extends React.Component {
       return;
     }
 
-    this.setState({ isConsoleOpen: true });
+    this.setState({ uploading: true, showProgess: true, progress: 0 });
 
     const port = this.state.ports[selected.port];
     const data = { ...selected, port: port };
 
     console.log(data);
     ipcRenderer.send("upload", data);
+
+    ipcRenderer.on("console:data", (e, item) => {
+      this.setState(state => ({
+        progress: state.progress > 0.95 ? 0.95 : state.progress + 0.0105
+      }));
+    });
+
+    ipcRenderer.on("console:err", (e, item) => {
+      alert("Error, please try again");
+    });
+
+    ipcRenderer.on("console:done", (e, item) => {
+      this.setState({ progress: 1, isConsoleOpen: false, uploading: false });
+      setTimeout(() => alert("Done"), 100);
+      setTimeout(() => this.setState({ showProgess: false }), 3000);
+    });
   }
 
   openConsole() {
@@ -98,8 +118,17 @@ class App extends React.Component {
   }
 
   render() {
-    const { selected, isConsoleOpen, ports } = this.state;
+    const {
+      selected,
+      isConsoleOpen,
+      ports,
+      uploading,
+      progress,
+      showProgess
+    } = this.state;
     const buttons = [this.openConsole, this.upload, this.close];
+
+    console.log(uploading);
 
     return (
       <div className="container">
@@ -109,13 +138,17 @@ class App extends React.Component {
         <BaudRateSelector
           selected={selected.baudrate}
           selectBaud={this.selectBaud}
+          uploading={uploading}
         />
         <PlatformSelector
           selected={selected.platform}
           selectPlatform={this.selectPlatform}
+          uploading={uploading}
         />
 
-        <Footer buttons={buttons} />
+        {showProgess && <ProgressBar progress={progress} />}
+
+        <Footer buttons={buttons} uploading={uploading} />
       </div>
     );
   }

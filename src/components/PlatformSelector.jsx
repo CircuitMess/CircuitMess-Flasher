@@ -1,16 +1,16 @@
 import React from "react";
 
 const PlatformSelector = props => {
-  const { selectPlatform, selected } = props;
+  const { selectPlatform, selected, uploading } = props;
 
   return (
     <React.Fragment>
       <div className="text">Select mode</div>
-      <div className="choice">
+      <div className={`choice ${uploading ? "disabled" : ""}`}>
         {[0, 1, 2].map(i => (
           <div
             className="flex"
-            onClick={() => selectPlatform(i)}
+            onClick={() => !uploading && selectPlatform(i)}
             key={"platform" + i}
           >
             <div className={`button img ${selected === i ? "active" : ""}`}>
@@ -23,6 +23,7 @@ const PlatformSelector = props => {
           </div>
         ))}
       </div>
+      <br />
     </React.Fragment>
   );
 };

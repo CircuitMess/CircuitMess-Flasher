@@ -12,13 +12,13 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800,
-    height: 625,
+    height: 650,
     webPreferences: {
       nodeIntegration: true
     }
   });
 
-  // mainWindow.setMenu(null);
+  mainWindow.setMenu(null);
 
   // and load the index.html of the app.
   // mainWindow.loadFile('index.html')
@@ -33,7 +33,7 @@ function createWindow() {
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {
@@ -70,15 +70,17 @@ ipcMain.on("ports", (e, data) => {
 });
 
 const platforms = ["Arduino", "Python", "LUA"];
-const baudrates = [9600, 57600, 74880, 115200, 230400, 460800, 921600];
+const baudrates = [115200, 230400, 460800, 921600];
 
 const port_baud_params = (port, baud) => ["--port", port, "--baud", baud];
 const default_params = ["--before", "default_reset", "--after", "hard_reset"];
 
+const libPath = process.env.ELECTRON_START_URL ? "lib/" : "resources/lib/";
+
 const erase = (port, baud, os) =>
   os === "windows"
     ? {
-        command: "resources/lib/esptool.exe",
+        command: `${libPath}esptool.exe`,
         params: [
           ...port_baud_params(port, baud),
           ...default_params,
@@ -88,7 +90,7 @@ const erase = (port, baud, os) =>
     : {
         command: "python",
         params: [
-          "resources/lib/esptool.py",
+          `${libPath}esptool.py`,
           ...port_baud_params(port, baud),
           ...default_params,
           "erase_flash"
@@ -98,7 +100,7 @@ const erase = (port, baud, os) =>
 const flash = (port, baud, os) =>
   os === "windows"
     ? {
-        command: "resources/lib/esptool.exe",
+        command: `${libPath}esptool.exe`,
         params: [
           ...port_baud_params(port, baud),
           ...default_params,
@@ -109,7 +111,7 @@ const flash = (port, baud, os) =>
     : {
         command: "python",
         params: [
-          "resources/lib/esptool.py",
+          `${libPath}esptool.py`,
           ...port_baud_params(port, baud),
           ...default_params,
           "write_flash",
@@ -120,7 +122,7 @@ const flash = (port, baud, os) =>
 const platformOptions = platform => {
   switch (platform) {
     case "Python":
-      return ["0x1000", "resources/lib/bins/python.bin"];
+      return ["0x1000", `${libPath}bins/python.bin`];
     case "LUA":
       return [
         "--flash_mode",
@@ -130,15 +132,15 @@ const platformOptions = platform => {
         "--flash_size",
         "detect",
         "0x1000",
-        "resources/lib/bins/lua/bootloader.GENERIC.bin",
+        `${libPath}bins/lua/bootloader.GENERIC.bin`,
         "0x90000",
-        "resources/lib/bins/lua/lua_rtos.bin",
+        `${libPath}bins/lua/lua_rtos.bin`,
         "0x8000",
-        "resources/lib/bins/lua/partitions.bin"
+        `${libPath}bins/lua/partitions.bin`
       ];
     default:
       //arduino TODO
-      return ["-z", "0x1000", "resources/lib/bins/python.bin"];
+      return ["-z", "0x1000", `${libPath}bins/python.bin`];
   }
 };
 

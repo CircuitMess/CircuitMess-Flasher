@@ -9,7 +9,7 @@ const Console = props => {
   const bottom = useRef(null);
 
   const scroll = () => {
-    bottom.current.scrollIntoView();
+    bottom && bottom.current && bottom.current.scrollIntoView();
   };
 
   useEffect(() => {

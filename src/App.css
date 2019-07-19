@@ -119,10 +119,18 @@ body {
   position: absolute;
   bottom: 20px;
   right: 20px;
+  left: 20px;
+  display: flex;
+  /* width: 100%; */
+}
+
+.footer .rightButton {
+  position: absolute;
+  right: 0px;
 }
 
 .footer .button-container {
-  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .choice .button {
@@ -150,13 +158,25 @@ body {
 }
 
 .button:active, .button.active {
-  box-shadow: 0px 0px 0px #00000040;
+  box-shadow: 0px 0px 0px #f5dfdf40;
   transform: translateY(6px);
   transition-duration: 0.1s;
 }
 
-.button:hover:not(.active), .button.img.active {
+.button.img {
   opacity: 0.3;
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+.button:hover:not(.active), .button.img.active {
+  opacity: 1;
+}
+
+.button.img.active {
+  transform: translateY(-6px);
 }
 
 .button .content {
