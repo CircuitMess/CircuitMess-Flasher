@@ -1,7 +1,13 @@
+:root {
+  --background: #1045ba;
+  --foreground: #ffc629;
+}
+
 body {
   font-family: 'Roboto', sans-serif;
   color: white;
-  background-color: #1b61bd;
+  /* background-color: #1b61bd; */
+  background-color: var(--background);
   margin: 0;
 }
 
@@ -144,7 +150,8 @@ body {
   height: 25px;
   padding: 10px 20px;
   border-radius: 10px;
-  background-color: #2483ff;
+  /* background-color: #2483ff; */
+  background-color: var(--foreground);
   color: #fff;
   transition-duration: 0.3s;
   box-shadow: 0px 3px 0px #00000040;
@@ -154,7 +161,8 @@ body {
 
 .button.active {
   background-color: #ffffff;
-  color: #2483ff;
+  /* color: #2483ff; */
+  color: var(--foreground);
 }
 
 .button:active, .button.active {
